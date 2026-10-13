@@ -24,7 +24,6 @@ from .schema import json_schema_to_fields, json_schema_to_collection_schema
 ogr.UseExceptions()
 osr.UseExceptions()
 
-_id_cache = TTLCache(maxsize=240, ttl=86400)
 _count_cache = TTLCache(maxsize=10240, ttl=86400)
 _signal_mtime: float = 0.0
 _logger = logging.getLogger(__name__)
@@ -53,7 +52,7 @@ class PostgreSQLProvider(PostgreSQLExtendedProvider):
     A provider for querying a PostgreSQL database.
       * Supports nonlinear geometry types
       * Supports field mappings for richer JSON schema
-      * Caches table IDs for faster creation of fields for previous and next items
+      * Finds the previous and next item through the id column's index
       * Improved performance when querying large tables
       * Selectable property shape (dotted | nested | flat_leaf)
       * Fixes a bug related to BBOX filtering
@@ -309,6 +308,8 @@ class PostgreSQLProvider(PostgreSQLExtendedProvider):
                 msg = f"No such item: {self.id_field}={identifier}."
                 raise ProviderItemNotFoundError(msg)
 
+            item_id = getattr(item, self.id_field)
+
             links_base = _determine_links_base_url(kwargs, self.links_base_url)
 
             target_crs = _get_target_crs(
@@ -335,7 +336,7 @@ class PostgreSQLProvider(PostgreSQLExtendedProvider):
                     if item not in self.properties and item not in self._synthetic_keys:
                         props.pop(item)
 
-            self._set_prev_and_next(identifier, feature, session)
+            self._set_prev_and_next(item_id, feature, session)
 
         return feature
 
@@ -528,46 +529,31 @@ class PostgreSQLProvider(PostgreSQLExtendedProvider):
 
         return result
 
-    def _set_prev_and_next(self, identifier, feature: Dict, session: Session) -> None:
-        identifier_str = str(identifier)
-        ids = _get_table_ids(self.table_model, self.id_field, session)
+    def _set_prev_and_next(self, item_id: Any, feature: Dict, session: Session) -> None:
+        id_column = getattr(self.table_model, self.id_field)
 
-        index = _find_identifier_index(ids, identifier_str)
+        prev = (
+            session.query(id_column)
+            .filter(id_column < item_id)
+            .order_by(id_column.desc())
+            .limit(1)
+            .scalar()
+        )
+        if prev is None:
+            prev = session.query(func.max(id_column)).scalar()
 
-        if index is None:
-            cache = getattr(_get_table_ids, "cache", None)
-            cache_key = keys.hashkey(self.table_model)
+        next = (
+            session.query(id_column)
+            .filter(id_column > item_id)
+            .order_by(id_column.asc())
+            .limit(1)
+            .scalar()
+        )
+        if next is None:
+            next = session.query(func.min(id_column)).scalar()
 
-            if cache is not None:
-                cache.pop(cache_key, None)
-
-            ids = _get_table_ids(self.table_model, self.id_field, session)
-            index = _find_identifier_index(ids, identifier_str)
-
-        if index is None:
-            _logger.warning(
-                'ID "%s" not found in cached list for %s; skipping prev/next generation.',
-                identifier,
-                getattr(self.table_model, "__tablename__", self.table_model),
-            )
-            return
-
-        if len(ids) == 1:
-            prev = ids[0]
-        elif index == 0:
-            prev = ids[-1]
-        else:
-            prev = ids[index - 1]
-
-        if len(ids) == 1:
-            next = ids[0]
-        elif index + 1 == len(ids):
-            next = ids[0]
-        else:
-            next = ids[index + 1]
-
-        feature["prev"] = prev
-        feature["next"] = next
+        feature["prev"] = str(prev)
+        feature["next"] = str(next)
 
     def _add_provider_links(
         self, feature: Dict[str, Any], feature_id: Any, links_base: str | None
@@ -738,18 +724,6 @@ def _add_geojson_crs(geojson: Dict[str, Any], crs_uri: str) -> None:
 
 
 @cached(
-    cache=_id_cache,
-    key=lambda table_model, id_field, session: keys.hashkey(table_model),
-)
-def _get_table_ids(table_model, id_field, session: Session) -> List[Any]:
-    id_column = getattr(table_model, id_field)
-    result = session.query(id_column).order_by(id_column.asc())
-    ids = [str(r[0]) for r in result]
-
-    return ids
-
-
-@cached(
     cache=_count_cache,
     # filterq is a pygeofilter AST (unhashable dataclasses) when a CQL filter
     # is supplied; key on its repr, which is deterministic and field-complete.
@@ -792,9 +766,8 @@ def flush_count_cache() -> None:
 
 
 def flush_caches() -> None:
-    """Invalidate both module-level TTL caches (in-process only)."""
+    """Invalidate the module-level caches (in-process only)."""
     _count_cache.clear()
-    _id_cache.clear()
 
 
 def _maybe_invalidate_from_signal(signal_path: str) -> None:
@@ -809,13 +782,6 @@ def _maybe_invalidate_from_signal(signal_path: str) -> None:
     if current > _signal_mtime:
         _signal_mtime = current
         flush_caches()
-
-
-def _find_identifier_index(ids: List[Any], identifier: str) -> int | None:
-    try:
-        return ids.index(identifier)
-    except ValueError:
-        return None
 
 
 def _determine_links_base_url(

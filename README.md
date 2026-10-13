@@ -51,8 +51,9 @@ not reported — the schema is the allowlist.
 
 ## Cache invalidation
 
-`numberMatched` counts and prev/next id sets are cached in-process with a
-24-hour TTL. To force invalidation after a data swap (e.g. pg-data-sync),
+`numberMatched` counts are cached in-process with a 24-hour TTL. A single
+item's prev/next ids are not cached: each is one lookup on the id column's
+index. To force invalidation after a data swap (e.g. pg-data-sync),
 configure a sentinel file the provider watches:
 
 ```yaml
@@ -63,8 +64,8 @@ providers:
 ```
 
 The provider checks the file's mtime at the start of every `query()` and
-`get()`. When the mtime advances, both `_count_cache` and `_sessions_cache`
-are cleared. The sync process triggers invalidation with a single touch:
+`get()`. When the mtime advances, the count cache is
+cleared. The sync process triggers invalidation with a single touch:
 
 ```python
 from pathlib import Path
