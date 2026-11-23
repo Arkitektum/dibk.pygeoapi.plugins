@@ -311,7 +311,7 @@ wheels = [
 
 [[package]]
 name = "gml-npad-formatter"
-version = "0.5.0"
+version = "0.5.1"
 source = { editable = "packages/gml_npad_formatter" }
 dependencies = [
     { name = "lxml" },
@@ -386,7 +386,7 @@ wheels = [
 
 [[package]]
 name = "jsonfg-formatter"
-version = "0.1.0"
+version = "0.5.0"
 source = { editable = "packages/jsonfg_formatter" }
 dependencies = [
     { name = "pygeoapi" },
@@ -664,7 +664,7 @@ wheels = [
 
 [[package]]
 name = "mvt-postgresql-provider"
-version = "1.0.0"
+version = "0.5.0"
 source = { editable = "packages/mvt_postgresql_provider" }
 dependencies = [
     { name = "cachetools" },
@@ -774,7 +774,7 @@ wheels = [
 
 [[package]]
 name = "postgresql-provider"
-version = "0.5.2"
+version = "0.5.3"
 source = { editable = "packages/postgresql_provider" }
 dependencies = [
     { name = "cachetools" },

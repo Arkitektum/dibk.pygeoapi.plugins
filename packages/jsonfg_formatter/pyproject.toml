@@ -1,6 +1,6 @@
 [project]
 name = "jsonfg_formatter"
-version = "0.1.0"
+version = "0.5.0"
 description = "JSON-FG (OGC Features and Geometries JSON) output formatter for pygeoapi"
 readme = "README.md"
 authors = [{ name = "Arkitektum AS" }]

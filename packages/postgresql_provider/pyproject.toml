@@ -1,7 +1,7 @@
 [project]
 name = "postgresql_provider"
 description = "Extended PostgreSQL provider for pygeoapi"
-version = "0.5.2"
+version = "0.5.3"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
