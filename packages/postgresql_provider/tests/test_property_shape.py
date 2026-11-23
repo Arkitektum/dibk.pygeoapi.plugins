@@ -133,14 +133,10 @@ class TestFieldsProperty:
             "plantype",
         }
 
-    def test_nested_builds_object_schemas(self):
+    def test_nested_keeps_dotted_keys(self):
+        """pygeoapi matches query parameters, sortby and queryables against
+        the keys of ``fields``, so they stay dotted (``identifikasjon.lokalId``)
+        even when features are nested. The nested shape is described by
+        ``get_collection_schema`` instead."""
         provider = _StubProvider(PROPERTY_SHAPE_NESTED, fields=SAMPLE_FIELDS)
-        fields = provider.fields
-        assert fields["id"] == {"type": "string", "format": None}
-        assert fields["plantype"] == {"type": "integer", "format": None}
-        assert fields["identifikasjon"]["type"] == "object"
-        assert set(fields["identifikasjon"]["properties"].keys()) == {
-            "lokalId",
-            "navnerom",
-        }
-        assert set(fields["arealplanId"]["properties"].keys()) == {"kommunenummer"}
+        assert provider.fields == SAMPLE_FIELDS

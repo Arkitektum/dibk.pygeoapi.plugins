@@ -6,7 +6,6 @@ import postgresql_provider
 from postgresql_provider import (
     _count_cache,
     _maybe_invalidate_from_signal,
-    _sessions_cache,
     flush_caches,
     flush_count_cache,
 )
@@ -31,14 +30,12 @@ def test_flush_count_cache_idempotent_on_empty():
     assert len(_count_cache) == 0
 
 
-def test_flush_caches_clears_both_caches():
+def test_flush_caches_clears_count_cache():
     _count_cache["k1"] = 1
-    _sessions_cache["k2"] = 2
 
     flush_caches()
 
     assert len(_count_cache) == 0
-    assert len(_sessions_cache) == 0
 
 
 def test_signal_newer_mtime_flushes(tmp_path, monkeypatch):
