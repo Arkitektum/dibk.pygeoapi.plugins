@@ -4,10 +4,10 @@ requires-python = ">=3.12"
 
 [manifest]
 members = [
-    "mvt-postgresql-ext",
-    "postgresql-ext",
-    "pygeoapi-formatter-gml-npad",
-    "pygeoapi-formatter-jsonfg",
+    "gml-npad-formatter",
+    "jsonfg-formatter",
+    "mvt-postgresql-provider",
+    "postgresql-provider",
     "styles-provider",
 ]
 
@@ -310,6 +310,42 @@ wheels = [
 ]
 
 [[package]]
+name = "gml-npad-formatter"
+version = "0.5.0"
+source = { editable = "packages/gml_npad_formatter" }
+dependencies = [
+    { name = "lxml" },
+    { name = "pygeoapi" },
+]
+
+[package.optional-dependencies]
+dev = [
+    { name = "pytest" },
+    { name = "ruff" },
+    { name = "types-lxml" },
+]
+smoke = [
+    { name = "postgresql-provider" },
+    { name = "psycopg", extra = ["binary"] },
+    { name = "psycopg2-binary" },
+    { name = "pytest" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "lxml", specifier = ">=5.0.0" },
+    { name = "postgresql-provider", marker = "extra == 'smoke'", editable = "packages/postgresql_provider" },
+    { name = "psycopg", extras = ["binary"], marker = "extra == 'smoke'", specifier = ">=3.2.9" },
+    { name = "psycopg2-binary", marker = "extra == 'smoke'", specifier = ">=2.9" },
+    { name = "pygeoapi" },
+    { name = "pytest", marker = "extra == 'dev'" },
+    { name = "pytest", marker = "extra == 'smoke'" },
+    { name = "ruff", marker = "extra == 'dev'" },
+    { name = "types-lxml", marker = "extra == 'dev'" },
+]
+provides-extras = ["dev", "smoke"]
+
+[[package]]
 name = "idna"
 version = "3.20"
 source = { registry = "https://pypi.org/simple" }
@@ -347,6 +383,25 @@ sdist = { url = "https://files.pythonhosted.org/packages/df/bf/f7da0350254c0ed7c
 wheels = [
     { url = "https://files.pythonhosted.org/packages/62/a1/3d680cbfd5f4b8f15abc1d571870c5fc3e594bb582bc3b64ea099db13e56/jinja2-3.1.6-py3-none-any.whl", hash = "sha256:85ece4451f492d0c13c5dd7c13a64681a86afae63a5f347908daf103ce6d2f67", size = 134899, upload-time = "2025-03-05T20:05:00.369Z" },
 ]
+
+[[package]]
+name = "jsonfg-formatter"
+version = "0.1.0"
+source = { editable = "packages/jsonfg_formatter" }
+dependencies = [
+    { name = "pygeoapi" },
+]
+
+[package.dev-dependencies]
+dev = [
+    { name = "pytest" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "pygeoapi", specifier = ">=0.24.0" }]
+
+[package.metadata.requires-dev]
+dev = [{ name = "pytest", specifier = ">=9.1.1" }]
 
 [[package]]
 name = "jsonschema"
@@ -608,9 +663,9 @@ wheels = [
 ]
 
 [[package]]
-name = "mvt-postgresql-ext"
+name = "mvt-postgresql-provider"
 version = "1.0.0"
-source = { editable = "packages/mvt_postgresql_ext" }
+source = { editable = "packages/mvt_postgresql_provider" }
 dependencies = [
     { name = "cachetools" },
     { name = "geoalchemy2" },
@@ -718,9 +773,9 @@ wheels = [
 ]
 
 [[package]]
-name = "postgresql-ext"
+name = "postgresql-provider"
 version = "0.5.2"
-source = { editable = "packages/postgresql_ext" }
+source = { editable = "packages/postgresql_provider" }
 dependencies = [
     { name = "cachetools" },
     { name = "geoalchemy2" },
@@ -1018,61 +1073,6 @@ sdist = { url = "https://files.pythonhosted.org/packages/5a/be/6c658b14b0b73a301
 wheels = [
     { url = "https://files.pythonhosted.org/packages/0a/f9/b5c7eb51bb73c102e331b7afdcb7413cb3e66418af4ad8910a19acf48caf/pygeoapi-0.24.0-py2.py3-none-any.whl", hash = "sha256:0ca8063121c19b86c90e896ed72758ce942be6c4a232062cc919ff7a8af36435", size = 599073, upload-time = "2026-07-28T12:12:15.854Z" },
 ]
-
-[[package]]
-name = "pygeoapi-formatter-gml-npad"
-version = "0.5.0"
-source = { editable = "packages/gml_npad" }
-dependencies = [
-    { name = "lxml" },
-    { name = "pygeoapi" },
-]
-
-[package.optional-dependencies]
-dev = [
-    { name = "pytest" },
-    { name = "ruff" },
-    { name = "types-lxml" },
-]
-smoke = [
-    { name = "postgresql-ext" },
-    { name = "psycopg", extra = ["binary"] },
-    { name = "psycopg2-binary" },
-    { name = "pytest" },
-]
-
-[package.metadata]
-requires-dist = [
-    { name = "lxml", specifier = ">=5.0.0" },
-    { name = "postgresql-ext", marker = "extra == 'smoke'", editable = "packages/postgresql_ext" },
-    { name = "psycopg", extras = ["binary"], marker = "extra == 'smoke'", specifier = ">=3.2.9" },
-    { name = "psycopg2-binary", marker = "extra == 'smoke'", specifier = ">=2.9" },
-    { name = "pygeoapi" },
-    { name = "pytest", marker = "extra == 'dev'" },
-    { name = "pytest", marker = "extra == 'smoke'" },
-    { name = "ruff", marker = "extra == 'dev'" },
-    { name = "types-lxml", marker = "extra == 'dev'" },
-]
-provides-extras = ["dev", "smoke"]
-
-[[package]]
-name = "pygeoapi-formatter-jsonfg"
-version = "0.1.0"
-source = { editable = "packages/jsonfg" }
-dependencies = [
-    { name = "pygeoapi" },
-]
-
-[package.dev-dependencies]
-dev = [
-    { name = "pytest" },
-]
-
-[package.metadata]
-requires-dist = [{ name = "pygeoapi", specifier = ">=0.24.0" }]
-
-[package.metadata.requires-dev]
-dev = [{ name = "pytest", specifier = ">=9.1.1" }]
 
 [[package]]
 name = "pygeofilter"

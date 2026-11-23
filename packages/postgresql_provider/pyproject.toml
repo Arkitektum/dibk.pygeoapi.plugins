@@ -1,0 +1,26 @@
+[project]
+name = "postgresql_provider"
+description = "Extended PostgreSQL provider for pygeoapi"
+version = "0.5.2"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "pygeoapi>=0.24.0",
+    "SQLAlchemy>2.0",
+    "geoalchemy2",
+    "pygeofilter",
+    "cachetools"
+]
+
+[project.optional-dependencies]
+test = ["pytest>=8"]
+
+[build-system]
+requires = ["setuptools>=80.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+license-files = []
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

@@ -50,4 +50,4 @@ jobs:
           uv pip install "gdal==$(gdal-config --version)"
 
       - name: Run smoke tests
-        run: uv run --no-sync pytest packages/gml_npad -m smoke -v
+        run: uv run --no-sync pytest packages/gml_npad_formatter -m smoke -v
