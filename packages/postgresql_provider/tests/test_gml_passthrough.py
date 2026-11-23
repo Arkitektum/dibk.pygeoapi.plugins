@@ -25,7 +25,7 @@ from postgresql_provider import (
     PROPERTY_SHAPE_DOTTED,
     PROPERTY_SHAPE_FLAT_LEAF,
     PROPERTY_SHAPE_NESTED,
-    PostgreSQLExtendedProvider,
+    PostgreSQLProvider,
 )
 
 
@@ -47,7 +47,7 @@ def _make_table_model():
     return base.classes.feat
 
 
-class _GmlStub(PostgreSQLExtendedProvider):
+class _GmlStub(PostgreSQLProvider):
     """Provider stub that skips DB-backed init but attaches GML columns for real."""
 
     def __init__(

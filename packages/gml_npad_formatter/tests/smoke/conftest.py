@@ -67,7 +67,7 @@ def smoke_db():
 def _provider_def(table: str, geom_field: str) -> dict:
     return {
         "type": "feature",
-        "name": "postgresql_provider.PostgreSQLExtendedProvider",
+        "name": "postgresql_provider.PostgreSQLProvider",
         # property_shape: dotted is the contract this formatter requires
         # (postgresql_provider v0.3.0+).
         "property_shape": "dotted",

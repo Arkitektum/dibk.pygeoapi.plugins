@@ -5,7 +5,7 @@ from pygeoapi.provider.base import ProviderInvalidQueryError
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import declarative_base
 
-from postgresql_provider import PostgreSQLExtendedProvider
+from postgresql_provider import PostgreSQLProvider
 
 Base = declarative_base()
 
@@ -20,7 +20,7 @@ class _PlanomradeModel(Base):
 
 @pytest.fixture
 def provider():
-    prov = PostgreSQLExtendedProvider.__new__(PostgreSQLExtendedProvider)
+    prov = PostgreSQLProvider.__new__(PostgreSQLProvider)
     prov.table_model = _PlanomradeModel
     return prov
 

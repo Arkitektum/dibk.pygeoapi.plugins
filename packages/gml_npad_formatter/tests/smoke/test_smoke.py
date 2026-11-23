@@ -22,7 +22,7 @@ pytestmark = pytest.mark.smoke
 
 # Imports at module scope so a missing postgresql_provider fails collection loudly
 # rather than silently skipping.
-from postgresql_provider import PostgreSQLExtendedProvider  # noqa: E402
+from postgresql_provider import PostgreSQLProvider  # noqa: E402
 
 from gml_npad_formatter.kommuneplan_20190401 import (  # noqa: E402
     KommuneplanFormatter,
@@ -34,7 +34,7 @@ from gml_npad_formatter.reguleringsplan_20190401 import (  # noqa: E402
 
 def _query_features(provider_def: dict) -> dict:
     """Instantiate the provider and return its query() FeatureCollection."""
-    provider = PostgreSQLExtendedProvider(provider_def)
+    provider = PostgreSQLProvider(provider_def)
     return provider.query()
 
 

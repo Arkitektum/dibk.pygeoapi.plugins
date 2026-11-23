@@ -26,7 +26,7 @@ feature properties and in the queryable schema.
 ```yaml
 providers:
   - type: feature
-    name: postgresql_provider.PostgreSQLExtendedProvider
+    name: postgresql_provider.PostgreSQLProvider
     property_shape: dotted
 ```
 
@@ -59,7 +59,7 @@ configure a sentinel file the provider watches:
 ```yaml
 providers:
   - type: feature
-    name: postgresql_provider.PostgreSQLExtendedProvider
+    name: postgresql_provider.PostgreSQLProvider
     cache_signal_path: /var/run/pygeoapi/sync.signal
 ```
 
@@ -90,7 +90,7 @@ PostGIS `ST_AsGML` at query time:
 ```yaml
 providers:
   - type: feature
-    name: postgresql_provider.PostgreSQLExtendedProvider
+    name: postgresql_provider.PostgreSQLProvider
     property_shape: dotted
     gml_passthrough: true
     derived_point_passthrough: true   # only for collections needing label points
@@ -128,7 +128,7 @@ feature.
 ```yaml
 providers:
   - type: feature
-    name: postgresql_provider.PostgreSQLExtendedProvider
+    name: postgresql_provider.PostgreSQLProvider
     data:
       id_field: your_id
       table: parent_collection_table

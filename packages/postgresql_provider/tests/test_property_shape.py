@@ -13,12 +13,12 @@ from postgresql_provider import (
     PROPERTY_SHAPE_DOTTED,
     PROPERTY_SHAPE_FLAT_LEAF,
     PROPERTY_SHAPE_NESTED,
-    PostgreSQLExtendedProvider,
+    PostgreSQLProvider,
     _resolve_property_shape,
 )
 
 
-class _StubProvider(PostgreSQLExtendedProvider):
+class _StubProvider(PostgreSQLProvider):
     """Provider stub that skips DB-backed init for pure-transform tests."""
 
     def __init__(self, property_shape: str, fields: dict | None = None):

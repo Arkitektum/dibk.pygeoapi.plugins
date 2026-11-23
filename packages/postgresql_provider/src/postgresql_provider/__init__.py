@@ -16,7 +16,7 @@ from pygeoapi.provider.base import (
     ProviderInvalidQueryError,
     ProviderItemNotFoundError,
 )
-from pygeoapi.provider.sql import PostgreSQLProvider as PostgreSQLExtendedProvider
+from pygeoapi.provider.sql import PostgreSQLProvider as PostgreSQLProviderBase
 from pygeoapi.crs import CrsTransformSpec, get_crs, transform_bbox, DEFAULT_STORAGE_CRS
 from .schema import json_schema_to_fields, json_schema_to_collection_schema
 
@@ -46,7 +46,7 @@ GEOMETRY_GML_KEY = "_geometry_gml"
 DERIVED_POINT_GML_KEY = "_derived_point_gml"
 
 
-class PostgreSQLProvider(PostgreSQLExtendedProvider):
+class PostgreSQLProvider(PostgreSQLProviderBase):
     """
     A provider for querying a PostgreSQL database.
       * Supports nonlinear geometry types

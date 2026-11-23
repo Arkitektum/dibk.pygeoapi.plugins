@@ -76,7 +76,7 @@ resources:
     type: collection
     providers:
       - type: feature
-        name: postgresql_provider.PostgreSQLExtendedProvider
+        name: postgresql_provider.PostgreSQLProvider
         # ...
     formatters:
       - name: gml_npad_formatter.reguleringsplan_20190401.ReguleringsplanFormatter
