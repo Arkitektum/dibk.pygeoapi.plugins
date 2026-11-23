@@ -1,6 +1,6 @@
 [project]
 name = "styles_provider"
-version = "1.0.0"
+version = "0.5.0"
 description = "Styles provider for pygeoapi"
 readme = "README.md"
 requires-python = ">=3.12"
