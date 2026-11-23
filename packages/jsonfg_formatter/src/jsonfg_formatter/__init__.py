@@ -28,7 +28,7 @@ Modules:
 from .formatter import JsonFgFormatter
 from .geometry import JsonFgError, geometry_to_place, has_arcs
 
-__version__ = "0.1.0"
+__version__ = "0.5.0"
 
 __all__ = [
     "JsonFgError",
