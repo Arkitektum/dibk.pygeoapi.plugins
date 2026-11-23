@@ -2,7 +2,6 @@ import json
 import os
 from copy import deepcopy
 import logging
-import xml.etree.ElementTree as ET
 from typing import Dict, Iterable, List, Tuple, Any
 from urllib.parse import urljoin, urlsplit, urlunsplit
 from osgeo import ogr, osr
