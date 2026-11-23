@@ -20,15 +20,13 @@ definition, e.g. `/styles/rpomrade?f=se11`.
 
 ## Installation
 
-```sh
-uv pip install .
+Into an existing pygeoapi environment, pinned to a release tag:
+
+```bash
+uv pip install "styles_provider @ git+https://github.com/Arkitektum/dibk.pygeoapi.plugins@styles_provider-v<version>#subdirectory=packages/styles_provider"
 ```
 
-or, for development:
-
-```sh
-uv pip install -e .
-```
+For local development, see the [repository README](../../README.md#development).
 
 Requires Python 3.12 or later.
 

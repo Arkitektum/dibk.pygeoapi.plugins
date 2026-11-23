@@ -25,8 +25,13 @@ smoke = [
     # postgresql_ext builds its engine via that dialect. Matches the pattern in
     # pygeoapi.plandata's Dockerfile, which also installs both side by side.
     "psycopg2-binary>=2.9",
-    "postgresql_ext @ git+https://github.com/Arkitektum/pygeoapi.provider.postgresql_ext@v0.5.0",
+    # Resolved from the workspace (packages/postgresql_ext), so the smoke tests
+    # run against the provider as it is in this repo, not a pinned release.
+    "postgresql_ext",
 ]
+
+[tool.uv.sources]
+postgresql_ext = { workspace = true }
 
 [build-system]
 requires = ["setuptools>=80.0"]
@@ -37,9 +42,6 @@ where = ["src"]
 
 [tool.setuptools.package-data]
 pygeoapi_formatter_gml_npad = ["py.typed"]
-
-[tool.ruff]
-target-version = "py312"
 
 [tool.ty.src]
 # The smoke tests import psycopg + postgresql_ext, which aren't installed

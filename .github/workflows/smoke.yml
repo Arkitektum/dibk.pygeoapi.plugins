@@ -35,11 +35,9 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
-      - name: Set up Python 3.13
-        uses: actions/setup-python@v6
+      - uses: astral-sh/setup-uv@v7
         with:
           python-version: "3.13"
-          cache: pip
 
       - name: Install GDAL system libraries
         run: |
@@ -48,8 +46,8 @@ jobs:
 
       - name: Install smoke dependencies
         run: |
-          pip install -e '.[smoke]'
-          pip install "gdal==$(gdal-config --version)"
+          uv sync --locked --all-packages --extra smoke
+          uv pip install "gdal==$(gdal-config --version)"
 
       - name: Run smoke tests
-        run: pytest -m smoke -v
+        run: uv run --no-sync pytest packages/gml_npad -m smoke -v

@@ -82,15 +82,13 @@ whole response.
 
 ## Installation
 
-```bash
-uv sync
-```
-
-or, into an existing pygeoapi environment:
+Into an existing pygeoapi environment, pinned to a release tag:
 
 ```bash
-pip install .
+uv pip install "pygeoapi-formatter-jsonfg @ git+https://github.com/Arkitektum/dibk.pygeoapi.plugins@jsonfg-v<version>#subdirectory=packages/jsonfg"
 ```
+
+For local development, see the [repository README](../../README.md#development).
 
 ## Configuration
 

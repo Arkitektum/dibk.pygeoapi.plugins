@@ -1,0 +1,49 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: astral-sh/setup-uv@v7
+
+      - name: Lint
+        run: uv run --locked ruff check .
+
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # Only packages that have a tests/ directory.
+        package: [postgresql_ext, jsonfg, gml_npad]
+        python-version: ["3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: astral-sh/setup-uv@v7
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      # jsonfg's tests build real OGR geometries; the other packages stub osgeo.
+      - name: Install GDAL system libraries
+        if: matrix.package == 'jsonfg'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libgdal-dev gdal-bin
+
+      - name: Install workspace
+        run: uv sync --locked --all-packages
+
+      - name: Install GDAL Python bindings
+        if: matrix.package == 'jsonfg'
+        run: uv pip install "gdal==$(gdal-config --version)"
+
+      - name: Test
+        run: uv run --no-sync pytest packages/${{ matrix.package }} -v

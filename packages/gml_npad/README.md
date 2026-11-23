@@ -51,16 +51,10 @@ schemas have different namespaces and feature sets.
 Installed via git in consuming Dockerfiles (no PyPI release):
 
 ```dockerfile
-RUN uv pip install git+https://github.com/Arkitektum/pygeoapi.formatter.gml-npad@main
+RUN uv pip install "pygeoapi-formatter-gml-npad @ git+https://github.com/Arkitektum/dibk.pygeoapi.plugins@gml_npad-v<version>#subdirectory=packages/gml_npad"
 ```
 
-For local development:
-
-```bash
-pip install -e .[dev]
-pytest
-ruff check .
-```
+For local development, see the [repository README](../../README.md#development).
 
 ## pygeoapi configuration
 

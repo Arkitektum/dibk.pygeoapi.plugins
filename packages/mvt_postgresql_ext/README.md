@@ -25,15 +25,13 @@ the TileJSON output that the base provider leaves unimplemented.
 
 ## Installation
 
-```bash
-uv sync
-```
-
-or, into an existing pygeoapi environment:
+Into an existing pygeoapi environment, pinned to a release tag:
 
 ```bash
-pip install .
+uv pip install "mvt_postgresql_ext @ git+https://github.com/Arkitektum/dibk.pygeoapi.plugins@mvt_postgresql_ext-v<version>#subdirectory=packages/mvt_postgresql_ext"
 ```
+
+For local development, see the [repository README](../../README.md#development).
 
 ## Configuration
 
