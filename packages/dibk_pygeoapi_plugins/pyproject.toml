@@ -1,0 +1,22 @@
+[project]
+name = "dibk_pygeoapi_plugins"
+description = "Stable dibk.pygeoapi.plugins.* names for the DiBK pygeoapi plugins"
+version = "0.5.0"
+readme = "README.md"
+requires-python = ">=3.12"
+# No dependencies on purpose: install only the plugins a deployment uses.
+# Each name imports its plugin package on first access.
+dependencies = []
+
+[build-system]
+requires = ["setuptools>=80.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+# dibk and dibk.pygeoapi are namespace packages (no __init__.py), so other
+# DiBK distributions can add their own dibk.* packages next to this one.
+namespaces = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

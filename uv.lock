@@ -4,6 +4,7 @@ requires-python = ">=3.12"
 
 [manifest]
 members = [
+    "dibk-pygeoapi-plugins",
     "gml-npad-formatter",
     "jsonfg-formatter",
     "mvt-postgresql-provider",
@@ -269,6 +270,11 @@ sdist = { url = "https://files.pythonhosted.org/packages/89/d9/d15e289b14dd41758
 wheels = [
     { url = "https://files.pythonhosted.org/packages/81/f0/1efe5925fb65ba58628656ae19bea27764f6e6817ecbc756c98746fce8e1/dateparser-1.5.1-py3-none-any.whl", hash = "sha256:1d312d2dbc3cddd61fe96d336af733b54bd01d7beb5657a432c7d1c2a144a5c8", size = 376770, upload-time = "2026-11-17T12:24:44.628Z" },
 ]
+
+[[package]]
+name = "dibk-pygeoapi-plugins"
+version = "0.5.0"
+source = { editable = "packages/dibk_pygeoapi_plugins" }
 
 [[package]]
 name = "filelock"

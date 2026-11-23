@@ -22,7 +22,7 @@ jobs:
       fail-fast: false
       matrix:
         # Only packages that have a tests/ directory.
-        package: [postgresql_provider, jsonfg_formatter, gml_npad_formatter]
+        package: [postgresql_provider, jsonfg_formatter, gml_npad_formatter, dibk_pygeoapi_plugins]
         python-version: ["3.12", "3.13"]
     steps:
       - uses: actions/checkout@v5
@@ -31,9 +31,10 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      # jsonfg_formatter's tests build real OGR geometries; the other packages stub osgeo.
+      # jsonfg_formatter's tests build real OGR geometries, and dibk_pygeoapi_plugins
+      # imports every plugin; the other packages stub osgeo.
       - name: Install GDAL system libraries
-        if: matrix.package == 'jsonfg_formatter'
+        if: matrix.package == 'jsonfg_formatter' || matrix.package == 'dibk_pygeoapi_plugins'
         run: |
           sudo apt-get update
           sudo apt-get install -y libgdal-dev gdal-bin
@@ -42,7 +43,7 @@ jobs:
         run: uv sync --locked --all-packages
 
       - name: Install GDAL Python bindings
-        if: matrix.package == 'jsonfg_formatter'
+        if: matrix.package == 'jsonfg_formatter' || matrix.package == 'dibk_pygeoapi_plugins'
         run: uv pip install "gdal==$(gdal-config --version)"
 
       - name: Test

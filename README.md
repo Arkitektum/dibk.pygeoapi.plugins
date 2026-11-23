@@ -11,6 +11,23 @@ together in one [uv workspace](https://docs.astral.sh/uv/concepts/projects/works
 | `styles_provider` | [`packages/styles_provider`](packages/styles_provider) | Styles provider |
 | `jsonfg_formatter` | [`packages/jsonfg_formatter`](packages/jsonfg_formatter) | Output formatter (JSON-FG) |
 | `gml_npad_formatter` | [`packages/gml_npad_formatter`](packages/gml_npad_formatter) | Output formatter (SOSI-GML NPAD) |
+| `dibk_pygeoapi_plugins` | [`packages/dibk_pygeoapi_plugins`](packages/dibk_pygeoapi_plugins) | `dibk.pygeoapi.plugins.*` names for the plugins above |
+
+## Plugin names in the pygeoapi config
+
+With `dibk_pygeoapi_plugins` installed, refer to the plugins by these names:
+
+| `name` | Kind |
+| --- | --- |
+| `dibk.pygeoapi.plugins.provider.PostgreSQL` | `feature` provider |
+| `dibk.pygeoapi.plugins.provider.MvtPostgreSQL` | `tile` provider |
+| `dibk.pygeoapi.plugins.provider.Styles` | `style` provider |
+| `dibk.pygeoapi.plugins.formatter.JsonFG` | formatter |
+| `dibk.pygeoapi.plugins.formatter.reguleringsplan_20190401.Reguleringsplan` | formatter |
+| `dibk.pygeoapi.plugins.formatter.kommuneplan_20190401.Kommuneplan` | formatter |
+
+The module paths of the implementing packages (e.g.
+`postgresql_provider.PostgreSQLProvider`) keep working as well.
 
 ## Installation
 
@@ -19,6 +36,7 @@ release tag, with `#subdirectory=` pointing at the package:
 
 ```dockerfile
 RUN uv pip install \
+    "dibk_pygeoapi_plugins @ git+https://github.com/Arkitektum/dibk.pygeoapi.plugins@dibk_pygeoapi_plugins-v0.5.0#subdirectory=packages/dibk_pygeoapi_plugins" \
     "postgresql_provider @ git+https://github.com/Arkitektum/dibk.pygeoapi.plugins@postgresql_provider-v0.5.3#subdirectory=packages/postgresql_provider" \
     "gml_npad_formatter @ git+https://github.com/Arkitektum/dibk.pygeoapi.plugins@gml_npad_formatter-v0.5.1#subdirectory=packages/gml_npad_formatter"
 ```
